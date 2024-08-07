@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, TextInput, View } from 'react-native';
-import { useAppDispatch } from '../hooks/redux';
-import { addTransactionsAction } from '../states/reducers';
+import { useAppDispatch } from '../../hooks/redux';
+import { addTransactionsAction } from '../../states/reducers';
+import { styles } from './styles';
 
 const TransactionScreen = ({ navigation }) => {
   const [amount, setAmount] = useState('');
@@ -21,40 +22,22 @@ const TransactionScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1,
-          width: '80%',
-          marginVertical: 8,
-        }}
+        style={styles.input}
         onChangeText={setAmount}
         value={amount}
         keyboardType="numeric"
         placeholder="Enter amount"
       />
       <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1,
-          width: '80%',
-          marginVertical: 8,
-        }}
+        style={styles.input}
         onChangeText={setName}
         value={name}
         placeholder="Recipient Name"
       />
       <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1,
-          width: '80%',
-          marginVertical: 8,
-        }}
+        style={styles.input}
         onChangeText={setIban}
         value={iban}
         placeholder="Recipient IBAN"

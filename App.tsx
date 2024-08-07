@@ -3,8 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import HomeScreen from './src/screens/HomeScreen';
-import TransactionScreen from './src/screens/TransactionScreen';
+import { HomeScreen, TransactionScreen } from './src/screens';
 import { persistor, store } from './src/states/store';
 
 const Stack = createNativeStackNavigator();
