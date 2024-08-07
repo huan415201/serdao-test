@@ -4,6 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import {
+  BeneficiaryScreen,
   HomeScreen,
   TransactionScreen,
 } from './src/screens';
@@ -22,6 +23,10 @@ const App = () => {
             <Stack.Screen
               name={SCREEN_KEY.Transaction}
               component={TransactionScreen}
+            />
+            <Stack.Screen
+              name={SCREEN_KEY.Beneficiary}
+              component={BeneficiaryScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
