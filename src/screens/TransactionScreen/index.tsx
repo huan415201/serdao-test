@@ -1,48 +1,98 @@
-import React, { useState } from 'react';
-import { Button, TextInput, View } from 'react-native';
-import { useAppDispatch } from '../../hooks/redux';
+import React, { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, Text, TextInput, View } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { addTransactionsAction } from '../../states/reducers';
+import { franceIBANPattern } from '../../utils';
 import { styles } from './styles';
 
 const TransactionScreen = ({ navigation }) => {
-  const [amount, setAmount] = useState('');
-  const [name, setName] = useState('');
-  const [iban, setIban] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      amount: '',
+      name: '',
+      iban: '',
+    },
+  });
+
+  const balance = useAppSelector(state => state.app.balance);
   const dispatch = useAppDispatch();
 
-  const handleTransaction = () => {
+  const handleTransaction = data => {
     dispatch(
       addTransactionsAction({
         id: Date.now(),
-        account: { firstName: name, lastName: '', IBAN: iban },
-        amount: parseFloat(amount),
+        account: { firstName: data.name, lastName: '', IBAN: data.iban },
+        amount: parseFloat(data.amount),
       }),
     );
     navigation.goBack();
   };
 
+  useEffect(() => {
+    console.log('errors:::', errors);
+  }, [errors]);
+
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        onChangeText={setAmount}
-        value={amount}
-        keyboardType="numeric"
-        placeholder="Enter amount"
+      <Controller
+        name="amount"
+        control={control}
+        rules={{ min: 0, max: balance }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            onChangeText={onChange}
+            value={value}
+            keyboardType="numeric"
+            placeholder="Enter amount"
+          />
+        )}
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={setName}
-        value={name}
-        placeholder="Recipient Name"
+      {errors.amount?.type === 'min' && (
+        <Text style={styles.errorText}>Invalid amount</Text>
+      )}
+      {errors.amount?.type === 'max' && (
+        <Text style={styles.errorText}>Insufficient balance</Text>
+      )}
+      <Controller
+        name="name"
+        control={control}
+        rules={{}}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Recipient Name"
+          />
+        )}
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={setIban}
-        value={iban}
-        placeholder="Recipient IBAN"
+      {/* E.g: FR7630006000011234567890189 */}
+      <Controller
+        name="iban"
+        control={control}
+        rules={{ pattern: franceIBANPattern }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            onChangeText={onChange}
+            value={value}
+            placeholder="Recipient IBAN"
+          />
+        )}
       />
-      <Button title="Submit Transaction" onPress={handleTransaction} />
+      {errors.iban && <Text style={styles.errorText}>Invalid IBAN</Text>}
+      <View style={styles.submitButton}>
+        <Button
+          title="Submit Transaction"
+          onPress={handleSubmit(handleTransaction)}
+        />
+      </View>
     </View>
   );
 };
