@@ -28,4 +28,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     width: '100%',
   },
+  transactionButton: {
+    marginTop: 10,
+  },
 });

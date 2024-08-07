@@ -9,4 +9,10 @@ export const styles = StyleSheet.create({
     width: '80%',
     marginVertical: 8,
   },
+  errorText: {
+    color: 'red',
+  },
+  submitButton: {
+    marginTop: 12,
+  },
 });

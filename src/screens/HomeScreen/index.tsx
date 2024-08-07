@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, FlatList, Text, View } from 'react-native';
 import { useAppSelector } from '../../hooks/redux';
 import { TransactionState } from '../../states/reducers';
+import { SCREEN_KEY } from '../../utils';
 import { styles } from './styles';
 
 const HomeScreen = ({ navigation }) => {
@@ -28,9 +29,15 @@ const HomeScreen = ({ navigation }) => {
         Current Balance: ${balance.toFixed(2)}
       </Text>
       <Button
-        title="Add Transaction"
-        onPress={() => navigation.navigate('Transaction')}
+        title="Add Beneficiary"
+        onPress={() => navigation.navigate(SCREEN_KEY.Beneficiary)}
       />
+      <View style={styles.transactionButton}>
+        <Button
+          title="Add Transaction"
+          onPress={() => navigation.navigate(SCREEN_KEY.Transaction)}
+        />
+      </View>
       <FlatList
         data={transactions}
         keyExtractor={item => item.id.toString()}
