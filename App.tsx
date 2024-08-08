@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -11,7 +11,15 @@ import {
 import { persistor, store } from './src/states/store';
 import { SCREEN_KEY } from './src/utils';
 
-const Stack = createNativeStackNavigator();
+type ScreenParamList = {
+  Home: undefined;
+  Transaction: undefined;
+  Beneficiary: undefined;
+};
+
+export type NavigationProps = NavigationProp<ScreenParamList>;
+
+const Stack = createNativeStackNavigator<ScreenParamList>();
 
 const App = () => {
   return (

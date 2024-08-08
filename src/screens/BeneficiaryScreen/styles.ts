@@ -15,12 +15,16 @@ export const styles = StyleSheet.create({
   submitButton: {
     marginTop: 12,
   },
-  selectWrapper: {
-    borderColor: 'gray',
-    borderWidth: 1,
+  item: {
+    backgroundColor: '#f9f9f9',
+    padding: 20,
     marginVertical: 8,
-    height: 40,
-    width: '80%',
-    justifyContent: 'center',
+    marginHorizontal: 16,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  itemText: {
+    fontSize: 16,
   },
 });
