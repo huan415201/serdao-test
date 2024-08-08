@@ -40,7 +40,7 @@ const TransactionScreen = ({ navigation }: { navigation: NavigationProps }) => {
   };
 
   useEffect(() => {
-    if (isFocused && beneficiaryList?.[0].id) {
+    if (isFocused && beneficiaryList?.[0]?.id) {
       setValue('beneficiaryId', beneficiaryList[0].id);
     }
   }, [isFocused, beneficiaryList, setValue]);
@@ -71,6 +71,7 @@ const TransactionScreen = ({ navigation }: { navigation: NavigationProps }) => {
       <Controller
         name="beneficiaryId"
         control={control}
+        rules={{ required: true }}
         render={({ field: { onChange, value } }) => (
           <View style={styles.selectWrapper}>
             <Picker
@@ -88,6 +89,9 @@ const TransactionScreen = ({ navigation }: { navigation: NavigationProps }) => {
           </View>
         )}
       />
+      {errors.beneficiaryId && (
+        <Text style={styles.errorText}>Recipient is required</Text>
+      )}
       <View style={styles.submitButton}>
         <Button
           title="Submit Transaction"
