@@ -3,13 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export type TransactionState = {
   id: number;
   amount: number;
-  account: BeneficiaryState;
+  beneficiaryId: string;
 };
 
 export type BeneficiaryState = {
+  id: string;
   firstName: string;
   lastName: string;
-  IBAN: string;
+  iban: string;
 };
 
 type AppState = {

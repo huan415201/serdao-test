@@ -1,32 +1,38 @@
+import { Picker } from '@react-native-picker/picker';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Text, TextInput, View } from 'react-native';
+import { NavigationProps } from '../../../App';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { addTransactionsAction } from '../../states/reducers';
-import { franceIBANPattern } from '../../utils';
 import { styles } from './styles';
 
-const TransactionScreen = ({ navigation }) => {
+const TransactionScreen = ({ navigation }: { navigation: NavigationProps }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     defaultValues: {
       amount: '',
-      name: '',
-      iban: '',
+      beneficiaryId: '',
     },
   });
-
+  const beneficiaryList = useAppSelector(state => state.app.beneficiaries);
   const balance = useAppSelector(state => state.app.balance);
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
 
-  const handleTransaction = data => {
+  const handleTransaction = (data: {
+    amount: string;
+    beneficiaryId: string;
+  }) => {
     dispatch(
       addTransactionsAction({
         id: Date.now(),
-        account: { firstName: data.name, lastName: '', IBAN: data.iban },
+        beneficiaryId: data.beneficiaryId,
         amount: parseFloat(data.amount),
       }),
     );
@@ -34,8 +40,10 @@ const TransactionScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log('errors:::', errors);
-  }, [errors]);
+    if (isFocused && beneficiaryList?.[0].id) {
+      setValue('beneficiaryId', beneficiaryList[0].id);
+    }
+  }, [isFocused, beneficiaryList, setValue]);
 
   return (
     <View style={styles.container}>
@@ -59,34 +67,27 @@ const TransactionScreen = ({ navigation }) => {
       {errors.amount?.type === 'max' && (
         <Text style={styles.errorText}>Insufficient balance</Text>
       )}
+
       <Controller
-        name="name"
+        name="beneficiaryId"
         control={control}
-        rules={{}}
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Recipient Name"
-          />
+          <View style={styles.selectWrapper}>
+            <Picker
+              selectedValue={value}
+              onValueChange={onChange}
+              placeholder="Recipient">
+              {beneficiaryList.map(item => (
+                <Picker.Item
+                  label={`${item.firstName} ${item.lastName}`}
+                  value={item.id}
+                  key={item.id}
+                />
+              ))}
+            </Picker>
+          </View>
         )}
       />
-      {/* E.g: FR7630006000011234567890189 */}
-      <Controller
-        name="iban"
-        control={control}
-        rules={{ pattern: franceIBANPattern }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Recipient IBAN"
-          />
-        )}
-      />
-      {errors.iban && <Text style={styles.errorText}>Invalid IBAN</Text>}
       <View style={styles.submitButton}>
         <Button
           title="Submit Transaction"

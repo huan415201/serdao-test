@@ -1,27 +1,35 @@
 import React from 'react';
 import { Button, FlatList, Text, View } from 'react-native';
+import { NavigationProps } from '../../../App';
 import { useAppSelector } from '../../hooks/redux';
 import { TransactionState } from '../../states/reducers';
 import { SCREEN_KEY } from '../../utils';
 import { styles } from './styles';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation }: { navigation: NavigationProps }) => {
   const { transactions, balance } = useAppSelector(state => state.app);
+  const beneficiaryList = useAppSelector(state => state.app.beneficiaries);
 
-  const renderItem = ({ item }: { item: TransactionState }) => (
-    <View style={styles.item}>
-      <Text style={styles.itemText}>Transaction ID: {item.id}</Text>
-      <Text style={styles.itemText}>Amount: ${item.amount.toFixed(2)}</Text>
-      {item.account && (
-        <>
-          <Text style={styles.itemText}>
-            To: {`${item.account.firstName} ${item.account.lastName}`}
-          </Text>
-          <Text style={styles.itemText}>IBAN: {item.account.IBAN}</Text>
-        </>
-      )}
-    </View>
-  );
+  const renderItem = ({ item }: { item: TransactionState }) => {
+    const currentRecipient = beneficiaryList.find(
+      i => item.beneficiaryId === i.id,
+    );
+    return (
+      <View style={styles.item}>
+        <Text style={styles.itemText}>Transaction ID: {item.id}</Text>
+        <Text style={styles.itemText}>Amount: ${item.amount.toFixed(2)}</Text>
+        {item.beneficiaryId && (
+          <>
+            <Text style={styles.itemText}>
+              To:{' '}
+              {`${currentRecipient?.firstName} ${currentRecipient?.lastName}`}
+            </Text>
+            <Text style={styles.itemText}>IBAN: {currentRecipient?.iban}</Text>
+          </>
+        )}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
