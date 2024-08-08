@@ -8,6 +8,8 @@ If it fails to start, open Android Studio and start an emulator first, then repe
 
 If it still fails, use this link for the APK file: https://drive.google.com/file/d/1bS0qnNTlV7_yotOCXmWiO26_Pa_Wbg4L/view?usp=sharing
 
+Example for France IBAN: FR7630006000011234567890189
+
 Note: I don't have a Macbook so I can only do this test on Android
 
 # Introduction
