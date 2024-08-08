@@ -6,7 +6,7 @@ Step 2: yarn android
 
 If it fails to start, open Android Studio and start an emulator first, then repeat step 2.
 
-If it still fails, use this link for the APK file: https://drive.google.com/file/d/1bS0qnNTlV7_yotOCXmWiO26_Pa_Wbg4L/view?usp=sharing
+If it still fails, use this link for the APK file: https://drive.google.com/file/d/1KU1xdvtLSXFtdhC2I7ubp-b0p8gPTzEE/view?usp=sharing
 
 Example for France IBAN: FR7630006000011234567890189
 
